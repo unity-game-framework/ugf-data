@@ -1,6 +1,9 @@
 {
     "name": "UGF.Data.Runtime",
-    "references": [],
+    "references": [
+        "GUID:8b6feb06b3e49da4f8cbda833160c1ad",
+        "GUID:c2546db33c90e844fb1f80f452ee3fb0"
+    ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
