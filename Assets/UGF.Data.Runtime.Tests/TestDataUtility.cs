@@ -2,8 +2,5 @@
 {
     public class TestDataUtility
     {
-        public void Test()
-        {
-        }
     }
 }
