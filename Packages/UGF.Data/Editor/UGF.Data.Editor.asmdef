@@ -1,0 +1,17 @@
+{
+    "name": "UGF.Data.Editor",
+    "references": [
+        "GUID:1db5274678cd51e49b9a2df809d4d3cd"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

@@ -1,0 +1,20 @@
+{
+    "name": "UGF.Data.Editor.Tests",
+    "references": [
+        "GUID:1db5274678cd51e49b9a2df809d4d3cd",
+        "GUID:597f4c13619b57d4f8b0d21a694e2ee8"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
