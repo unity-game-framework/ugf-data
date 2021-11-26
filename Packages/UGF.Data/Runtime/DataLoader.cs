@@ -6,7 +6,7 @@ namespace UGF.Data.Runtime
 {
     public abstract class DataLoader : IDataLoader
     {
-        public T Read<T>(string path, IContext context)
+        public T Read<T>(string path, IContext context) where T : class
         {
             return (T)Read(path, context);
         }
@@ -18,7 +18,7 @@ namespace UGF.Data.Runtime
             return OnRead(path, context);
         }
 
-        public async Task<T> ReadAsync<T>(string path, IContext context)
+        public async Task<T> ReadAsync<T>(string path, IContext context) where T : class
         {
             return (T)await ReadAsync(path, context);
         }
@@ -30,7 +30,7 @@ namespace UGF.Data.Runtime
             return OnReadAsync(path, context);
         }
 
-        public void Write<T>(string path, T data, IContext context)
+        public void Write<T>(string path, T data, IContext context) where T : class
         {
             Write(path, (object)data, context);
         }
@@ -43,7 +43,7 @@ namespace UGF.Data.Runtime
             OnWrite(path, data, context);
         }
 
-        public async Task WriteAsync<T>(string path, T data, IContext context)
+        public async Task WriteAsync<T>(string path, T data, IContext context) where T : class
         {
             await WriteAsync(path, (object)data, context);
         }
