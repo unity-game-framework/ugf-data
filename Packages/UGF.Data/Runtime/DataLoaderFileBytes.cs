@@ -5,7 +5,7 @@ using UGF.RuntimeTools.Runtime.Contexts;
 
 namespace UGF.Data.Runtime
 {
-    public class DataFileBytesLoader : DataLoader
+    public class DataLoaderFileBytes : DataLoader
     {
         protected override object OnRead(string path, IContext context)
         {

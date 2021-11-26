@@ -6,15 +6,15 @@ using UGF.RuntimeTools.Runtime.Contexts;
 
 namespace UGF.Data.Runtime
 {
-    public class DataFileTextLoader : DataLoader
+    public class DataLoaderFileText : DataLoader
     {
         public Encoding Encoding { get; }
 
-        public DataFileTextLoader() : this(Encoding.Default)
+        public DataLoaderFileText() : this(Encoding.Default)
         {
         }
 
-        public DataFileTextLoader(Encoding encoding)
+        public DataLoaderFileText(Encoding encoding)
         {
             Encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
         }
