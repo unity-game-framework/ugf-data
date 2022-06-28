@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using UGF.Application.Runtime;
 using UGF.RuntimeTools.Runtime.Storage;
+using UGF.RuntimeTools.Runtime.Tasks;
 
 namespace UGF.Data.Runtime
 {
@@ -15,32 +16,32 @@ namespace UGF.Data.Runtime
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
-        protected override object OnRead(string path, Type targetType)
+        protected override bool OnTryRead(string path, Type targetType, out object target)
         {
             path = GetPath(path);
 
-            return base.OnRead(path, targetType);
+            return base.OnTryRead(path, targetType, out target);
         }
 
-        protected override Task<object> OnReadAsync(string path, Type targetType)
+        protected override Task<TaskResult<object>> OnTryReadAsync(string path, Type targetType)
         {
             path = GetPath(path);
 
-            return base.OnReadAsync(path, targetType);
+            return base.OnTryReadAsync(path, targetType);
         }
 
-        protected override void OnWrite(string path, object target)
+        protected override bool OnTryWrite(string path, object target)
         {
             path = GetPath(path);
 
-            base.OnWrite(path, target);
+            return base.OnTryWrite(path, target);
         }
 
-        protected override Task OnWriteAsync(string path, object target)
+        protected override Task<bool> OnTryWriteAsync(string path, object target)
         {
             path = GetPath(path);
 
-            return base.OnWriteAsync(path, target);
+            return base.OnTryWriteAsync(path, target);
         }
 
         private string GetPath(string path)

@@ -3,117 +3,62 @@ using System.Threading.Tasks;
 using UGF.Application.Runtime;
 using UGF.Module.Controllers.Runtime;
 using UGF.Module.Serialize.Runtime;
+using UGF.RuntimeTools.Runtime.Tasks;
 using UGF.Serialize.Runtime;
 
 namespace UGF.Data.Runtime
 {
-    public class DataLoaderController : ControllerDescribed<DataLoaderControllerDescription>, IDataLoaderController
+    public class DataLoaderController : DataLoaderController<DataLoaderControllerDescription>
     {
-        protected IControllerModule ControllerModule { get; }
+        protected DataLoaderProviderController DataLoaderProviderController { get; }
         protected ISerializeModule SerializeModule { get; }
+        protected IDataLoader DataLoader { get; }
+        protected ISerializerAsync Serializer { get; }
 
         public DataLoaderController(DataLoaderControllerDescription description, IApplication application) : base(description, application)
         {
-            ControllerModule = Application.GetModule<IControllerModule>();
+            DataLoaderProviderController = Application.GetController<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
             SerializeModule = Application.GetModule<ISerializeModule>();
+            DataLoader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
+            Serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
         }
 
-        public T Read<T>(string path) where T : class
+        protected override bool OnTryRead(string path, Type targetType, out object target)
         {
-            return (T)Read(path, typeof(T));
+            if (DataLoader.TryRead(path, DataLoaderProviderController.Context, out object data))
+            {
+                target = Serializer.Deserialize(targetType, data, SerializeModule.Context);
+                return true;
+            }
+
+            target = default;
+            return false;
         }
 
-        public object Read(string path, Type targetType)
+        protected override async Task<TaskResult<object>> OnTryReadAsync(string path, Type targetType)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+            TaskResult<object> result = await DataLoader.TryReadAsync(path, DataLoaderProviderController.Context);
 
-            return OnRead(path, targetType);
+            if (result)
+            {
+                return await Serializer.DeserializeAsync(targetType, result.Value, SerializeModule.Context);
+            }
+
+            return TaskResult<object>.Empty;
         }
 
-        public async Task<T> ReadAsync<T>(string path) where T : class
+        protected override bool OnTryWrite(string path, object target)
         {
-            return (T)await ReadAsync(path, typeof(T));
+            object data = Serializer.Serialize(target, SerializeModule.Context);
+
+            return DataLoader.TryWrite(path, data, DataLoaderProviderController.Context);
         }
 
-        public Task<object> ReadAsync(string path, Type targetType)
+        protected override async Task<bool> OnTryWriteAsync(string path, object target)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+            object data = await Serializer.SerializeAsync(target, SerializeModule.Context);
 
-            return OnReadAsync(path, targetType);
-        }
-
-        public void Write<T>(string path, T target) where T : class
-        {
-            Write(path, (object)target);
-        }
-
-        public void Write(string path, object target)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (target == null) throw new ArgumentNullException(nameof(target));
-
-            OnWrite(path, target);
-        }
-
-        public Task WriteAsync<T>(string path, T target) where T : class
-        {
-            return WriteAsync(path, (object)target);
-        }
-
-        public Task WriteAsync(string path, object target)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (target == null) throw new ArgumentNullException(nameof(target));
-
-            return OnWriteAsync(path, target);
-        }
-
-        protected virtual object OnRead(string path, Type targetType)
-        {
-            var providerController = ControllerModule.Provider.Get<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
-            var loader = providerController.Provider.Get<IDataLoader>(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializer>(Description.SerializerId);
-
-            object data = DataLoaderExtensions.Read(path, providerController.Context);
-            object target = serializer.Deserialize(targetType, data, SerializeModule.Context);
-
-            return target;
-        }
-
-        protected virtual async Task<object> OnReadAsync(string path, Type targetType)
-        {
-            var providerController = ControllerModule.Provider.Get<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
-            var loader = providerController.Provider.Get<IDataLoader>(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
-
-            object data = await loader.ReadAsync(path, providerController.Context);
-            object target = await serializer.DeserializeAsync(targetType, data, SerializeModule.Context);
-
-            return target;
-        }
-
-        protected virtual void OnWrite(string path, object target)
-        {
-            var providerController = ControllerModule.Provider.Get<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
-            var loader = providerController.Provider.Get<IDataLoader>(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializer>(Description.SerializerId);
-
-            object data = serializer.Serialize(target, SerializeModule.Context);
-
-            loader.Write(path, data, providerController.Context);
-        }
-
-        protected virtual async Task OnWriteAsync(string path, object target)
-        {
-            var providerController = ControllerModule.Provider.Get<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
-            var loader = providerController.Provider.Get<IDataLoader>(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
-
-            object data = await serializer.SerializeAsync(target, SerializeModule.Context);
-
-            await loader.WriteAsync(path, data, providerController.Context);
+            return await DataLoader.TryWriteAsync(path, data, DataLoaderProviderController.Context);
         }
     }
 }
