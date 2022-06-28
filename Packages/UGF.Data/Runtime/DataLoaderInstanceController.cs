@@ -26,7 +26,7 @@ namespace UGF.Data.Runtime
 
             if (Description.ReadOnInitialize)
             {
-                Read();
+                TryRead(out _);
             }
         }
 
@@ -36,7 +36,7 @@ namespace UGF.Data.Runtime
 
             if (Description.ReadOnInitializeAsync)
             {
-                await ReadAsync();
+                await TryReadAsync();
             }
         }
 
@@ -46,7 +46,7 @@ namespace UGF.Data.Runtime
 
             if (Description.WriteOnUninitialize && HasData)
             {
-                Write();
+                TryWrite();
             }
         }
 
@@ -67,22 +67,44 @@ namespace UGF.Data.Runtime
 
         public object Read()
         {
-            return DataLoaderController.Read<object>(Description.Path);
+            Set(DataLoaderController.Read<object>(Description.Path));
+
+            return Data;
         }
 
-        public Task<object> ReadAsync()
+        public async Task<object> ReadAsync()
         {
-            return DataLoaderController.ReadAsync<object>(Description.Path);
+            Set(await DataLoaderController.ReadAsync<object>(Description.Path));
+
+            return Data;
         }
 
         public bool TryRead(out object data)
         {
-            return DataLoaderController.TryRead(Description.Path, out data);
+            if (DataLoaderController.TryRead(Description.Path, out object value))
+            {
+                Set(value);
+
+                data = Data;
+                return true;
+            }
+
+            data = default;
+            return false;
         }
 
-        public Task<TaskResult<object>> TryReadAsync()
+        public async Task<TaskResult<object>> TryReadAsync()
         {
-            return DataLoaderController.TryReadAsync<object>(Description.Path);
+            TaskResult<object> result = await DataLoaderController.TryReadAsync<object>(Description.Path);
+
+            if (result)
+            {
+                Set(result.Value);
+
+                return Data;
+            }
+
+            return TaskResult<object>.Empty;
         }
 
         public void Write()
