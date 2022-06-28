@@ -3,7 +3,7 @@
   "displayName": "UGF.Data",
   "version": "2.0.0-preview.1",
   "unity": "2021.3",
-  "apiCompatibility": ".NET Standard 2.0",
+  "apiCompatibility": ".NET Standard 2.1",
   "description": "Provides tools for working with data management.",
   "author": {
     "name": "Unity Game Framework",
