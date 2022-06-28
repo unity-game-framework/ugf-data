@@ -76,7 +76,7 @@ namespace UGF.Data.Runtime
             var loader = providerController.Provider.Get<IDataLoader>(Description.DataLoaderId);
             var serializer = SerializeModule.Provider.Get<ISerializer>(Description.SerializerId);
 
-            object data = loader.Read(path, providerController.Context);
+            object data = DataLoaderExtensions.Read(path, providerController.Context);
             object target = serializer.Deserialize(targetType, data, SerializeModule.Context);
 
             return target;
@@ -113,7 +113,7 @@ namespace UGF.Data.Runtime
 
             object data = await serializer.SerializeAsync(target, SerializeModule.Context);
 
-            await DataLoaderExtensions.WriteAsync(path, data, providerController.Context);
+            await loader.WriteAsync(path, data, providerController.Context);
         }
     }
 }
