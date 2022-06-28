@@ -1,14 +1,16 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using UGF.RuntimeTools.Runtime.Contexts;
+using UGF.RuntimeTools.Runtime.Tasks;
 
 namespace UGF.Data.Runtime
 {
     public class DataLoaderFileText : DataLoader
     {
         public Encoding Encoding { get; }
+
+        private readonly DataLoaderFileBytes m_loader = new DataLoaderFileBytes();
 
         public DataLoaderFileText() : this(Encoding.Default)
         {
@@ -19,57 +21,41 @@ namespace UGF.Data.Runtime
             Encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
         }
 
-        protected override object OnRead(string path, IContext context)
+        protected override bool OnTryRead(string path, IContext context, out object data)
         {
-            return File.Exists(path) ? File.ReadAllText(path, Encoding) : string.Empty;
-        }
-
-        protected override async Task<object> OnReadAsync(string path, IContext context)
-        {
-            if (File.Exists(path))
+            if (m_loader.TryRead(path, context, out byte[] bytes))
             {
-                await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-
-                byte[] bytes = new byte[stream.Length];
-
-                await stream.ReadAsync(bytes, 0, bytes.Length);
-
-                return Encoding.GetString(bytes);
+                data = Encoding.GetString(bytes);
+                return true;
             }
 
-            return string.Empty;
+            data = default;
+            return false;
         }
 
-        protected override void OnWrite(string path, object data, IContext context)
+        protected override async Task<TaskResult<object>> OnTryReadAsync(string path, IContext context)
         {
-            if (data is not string content) throw new ArgumentException("Data must be type of String.");
+            TaskResult<byte[]> result = await m_loader.TryReadAsync<byte[]>(path, context);
 
-            CreateDirectoryForFile(path);
-
-            File.WriteAllText(path, content, Encoding);
+            return result ? Encoding.GetString(result.Value) : TaskResult<object>.Empty;
         }
 
-        protected override async Task OnWriteAsync(string path, object data, IContext context)
+        protected override bool OnTryWrite(string path, object data, IContext context)
         {
-            if (data is not string content) throw new ArgumentException("Data must be type of String.");
+            if (data is not string text) throw new ArgumentException($"Data must be type of '{typeof(string)}'.");
 
-            CreateDirectoryForFile(path);
+            byte[] bytes = Encoding.GetBytes(text);
 
-            byte[] bytes = Encoding.GetBytes(content);
-
-            await using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
-
-            await stream.WriteAsync(bytes, 0, bytes.Length);
+            return m_loader.TryWrite(path, bytes, context);
         }
 
-        private void CreateDirectoryForFile(string path)
+        protected override Task<bool> OnTryWriteAsync(string path, object data, IContext context)
         {
-            string directoryPath = Path.GetDirectoryName(path);
+            if (data is not string text) throw new ArgumentException($"Data must be type of '{typeof(string)}'.");
 
-            if (!string.IsNullOrEmpty(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
+            byte[] bytes = Encoding.GetBytes(text);
+
+            return m_loader.TryWriteAsync(path, bytes, context);
         }
     }
 }

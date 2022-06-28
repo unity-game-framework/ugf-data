@@ -113,7 +113,7 @@ namespace UGF.Data.Runtime
 
             object data = await serializer.SerializeAsync(target, SerializeModule.Context);
 
-            await loader.WriteAsync(path, data, providerController.Context);
+            await DataLoaderExtensions.WriteAsync(path, data, providerController.Context);
         }
     }
 }
