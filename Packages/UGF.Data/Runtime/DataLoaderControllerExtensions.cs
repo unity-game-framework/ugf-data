@@ -32,9 +32,9 @@ namespace UGF.Data.Runtime
             return false;
         }
 
-        public static async Task<T> ReadAsync<T>(this IDataLoaderController controller, string path, Type targetType) where T : class
+        public static async Task<T> ReadAsync<T>(this IDataLoaderController controller, string path) where T : class
         {
-            return (T)await ReadAsync(controller, path, targetType);
+            return (T)await ReadAsync(controller, path, typeof(T));
         }
 
         public static async Task<object> ReadAsync(this IDataLoaderController controller, string path, Type targetType)
