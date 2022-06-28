@@ -1,51 +1,84 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using UGF.Logs.Runtime;
 using UGF.RuntimeTools.Runtime.Contexts;
+using UGF.RuntimeTools.Runtime.Tasks;
 
 namespace UGF.Data.Runtime
 {
     public class DataLoaderFileBytes : DataLoader
     {
-        protected override object OnRead(string path, IContext context)
-        {
-            return File.Exists(path) ? File.ReadAllBytes(path) : Array.Empty<byte>();
-        }
-
-        protected override async Task<object> OnReadAsync(string path, IContext context)
+        protected override bool OnTryRead(string path, IContext context, out object data)
         {
             if (File.Exists(path))
             {
-                await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-
-                byte[] bytes = new byte[stream.Length];
-
-                await stream.ReadAsync(bytes, 0, bytes.Length);
-
-                return bytes;
+                try
+                {
+                    data = File.ReadAllBytes(path);
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    Log.Warning(exception);
+                }
             }
 
-            return Array.Empty<byte>();
+            data = default;
+            return false;
         }
 
-        protected override void OnWrite(string path, object data, IContext context)
+        protected override async Task<TaskResult<object>> OnTryReadAsync(string path, IContext context)
         {
-            if (data is not byte[] bytes) throw new ArgumentException("Data must be type of Byte array.");
+            if (File.Exists(path))
+            {
+                try
+                {
+                    return await File.ReadAllBytesAsync(path);
+                }
+                catch (Exception exception)
+                {
+                    Log.Warning(exception);
+                }
+            }
+
+            return TaskResult<object>.Empty;
+        }
+
+        protected override bool OnTryWrite(string path, object data, IContext context)
+        {
+            if (data is not byte[] bytes) throw new ArgumentException($"Data must be type of '{typeof(byte[])}'.");
 
             CreateDirectoryForFile(path);
 
-            File.WriteAllBytes(path, bytes);
+            try
+            {
+                File.WriteAllBytes(path, bytes);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Log.Warning(exception);
+                return false;
+            }
         }
 
-        protected override async Task OnWriteAsync(string path, object data, IContext context)
+        protected override async Task<bool> OnTryWriteAsync(string path, object data, IContext context)
         {
-            if (data is not byte[] bytes) throw new ArgumentException("Data must be type of Byte array.");
+            if (data is not byte[] bytes) throw new ArgumentException($"Data must be type of '{typeof(byte[])}'.");
 
             CreateDirectoryForFile(path);
 
-            await using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
-
-            await stream.WriteAsync(bytes, 0, bytes.Length);
+            try
+            {
+                await File.WriteAllBytesAsync(path, bytes);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Log.Warning(exception);
+                return false;
+            }
         }
 
         private void CreateDirectoryForFile(string path)

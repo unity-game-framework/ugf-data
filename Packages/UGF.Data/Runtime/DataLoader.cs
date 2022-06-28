@@ -1,64 +1,38 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UGF.RuntimeTools.Runtime.Contexts;
+using UGF.RuntimeTools.Runtime.Tasks;
 
 namespace UGF.Data.Runtime
 {
     public abstract class DataLoader : IDataLoader
     {
-        public T Read<T>(string path, IContext context) where T : class
-        {
-            return (T)Read(path, context);
-        }
-
-        public object Read(string path, IContext context)
+        public bool TryRead(string path, IContext context, out object data)
         {
             if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
+            if (context == null) throw new ArgumentNullException(nameof(context));
 
-            return OnRead(path, context);
+            return OnTryRead(path, context, out data);
         }
 
-        public async Task<T> ReadAsync<T>(string path, IContext context) where T : class
+        public Task<TaskResult<object>> TryReadAsync(string path, IContext context)
         {
-            return (T)await ReadAsync(path, context);
+            return OnTryReadAsync(path, context);
         }
 
-        public Task<object> ReadAsync(string path, IContext context)
+        public bool TryWrite(string path, object data, IContext context)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-
-            return OnReadAsync(path, context);
+            return OnTryWrite(path, data, context);
         }
 
-        public void Write<T>(string path, T data, IContext context) where T : class
+        public Task<bool> TryWriteAsync(string path, object data, IContext context)
         {
-            Write(path, (object)data, context);
+            return OnTryWriteAsync(path, data, context);
         }
 
-        public void Write(string path, object data, IContext context)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
-            OnWrite(path, data, context);
-        }
-
-        public async Task WriteAsync<T>(string path, T data, IContext context) where T : class
-        {
-            await WriteAsync(path, (object)data, context);
-        }
-
-        public Task WriteAsync(string path, object data, IContext context)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Value cannot be null or empty.", nameof(path));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
-            return OnWriteAsync(path, data, context);
-        }
-
-        protected abstract object OnRead(string path, IContext context);
-        protected abstract Task<object> OnReadAsync(string path, IContext context);
-        protected abstract void OnWrite(string path, object data, IContext context);
-        protected abstract Task OnWriteAsync(string path, object data, IContext context);
+        protected abstract bool OnTryRead(string path, IContext context, out object data);
+        protected abstract Task<TaskResult<object>> OnTryReadAsync(string path, IContext context);
+        protected abstract bool OnTryWrite(string path, object data, IContext context);
+        protected abstract Task<bool> OnTryWriteAsync(string path, object data, IContext context);
     }
 }
