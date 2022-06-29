@@ -12,22 +12,21 @@ namespace UGF.Data.Runtime
     {
         protected DataLoaderProviderController DataLoaderProviderController { get; }
         protected ISerializeModule SerializeModule { get; }
-        protected IDataLoader DataLoader { get; }
-        protected ISerializerAsync Serializer { get; }
 
         public DataLoaderController(DataLoaderControllerDescription description, IApplication application) : base(description, application)
         {
             DataLoaderProviderController = Application.GetController<DataLoaderProviderController>(Description.DataLoaderProviderControllerId);
             SerializeModule = Application.GetModule<ISerializeModule>();
-            DataLoader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
-            Serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
         }
 
         protected override bool OnTryRead(string path, Type targetType, out object target)
         {
-            if (DataLoader.TryRead(path, DataLoaderProviderController.Context, out object data))
+            IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+
+            if (loader.TryRead(path, DataLoaderProviderController.Context, out object data))
             {
-                target = Serializer.Deserialize(targetType, data, SerializeModule.Context);
+                target = serializer.Deserialize(targetType, data, SerializeModule.Context);
                 return true;
             }
 
@@ -37,11 +36,14 @@ namespace UGF.Data.Runtime
 
         protected override async Task<TaskResult<object>> OnTryReadAsync(string path, Type targetType)
         {
-            TaskResult<object> result = await DataLoader.TryReadAsync(path, DataLoaderProviderController.Context);
+            IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+
+            TaskResult<object> result = await loader.TryReadAsync(path, DataLoaderProviderController.Context);
 
             if (result)
             {
-                return await Serializer.DeserializeAsync(targetType, result.Value, SerializeModule.Context);
+                return await serializer.DeserializeAsync(targetType, result.Value, SerializeModule.Context);
             }
 
             return TaskResult<object>.Empty;
@@ -49,16 +51,22 @@ namespace UGF.Data.Runtime
 
         protected override bool OnTryWrite(string path, object target)
         {
-            object data = Serializer.Serialize(target, SerializeModule.Context);
+            IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
 
-            return DataLoader.TryWrite(path, data, DataLoaderProviderController.Context);
+            object data = serializer.Serialize(target, SerializeModule.Context);
+
+            return loader.TryWrite(path, data, DataLoaderProviderController.Context);
         }
 
         protected override async Task<bool> OnTryWriteAsync(string path, object target)
         {
-            object data = await Serializer.SerializeAsync(target, SerializeModule.Context);
+            IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
 
-            return await DataLoader.TryWriteAsync(path, data, DataLoaderProviderController.Context);
+            object data = await serializer.SerializeAsync(target, SerializeModule.Context);
+
+            return await loader.TryWriteAsync(path, data, DataLoaderProviderController.Context);
         }
     }
 }
