@@ -6,6 +6,18 @@ namespace UGF.Data.Runtime
 {
     public static class DataLoaderInstanceControllerExtensions
     {
+        public static T GetOrCreate<T>(this DataLoaderInstanceController controller) where T : class, new()
+        {
+            if (controller == null) throw new ArgumentNullException(nameof(controller));
+
+            if (!controller.HasData)
+            {
+                controller.Set(new T());
+            }
+
+            return controller.Get<T>();
+        }
+
         public static T Read<T>(this DataLoaderInstanceController controller) where T : class
         {
             if (controller == null) throw new ArgumentNullException(nameof(controller));
