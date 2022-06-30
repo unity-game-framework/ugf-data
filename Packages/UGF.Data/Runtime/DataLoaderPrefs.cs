@@ -29,26 +29,18 @@ namespace UGF.Data.Runtime
         {
             if (data is not string text) throw new ArgumentException($"Data must be type of '{typeof(string)}'.");
 
-            if (PlayerPrefs.HasKey(path))
-            {
-                PlayerPrefs.SetString(path, text);
-                return true;
-            }
+            PlayerPrefs.SetString(path, text);
 
-            return false;
+            return true;
         }
 
         protected override Task<bool> OnTryWriteAsync(string path, object data, IContext context)
         {
             if (data is not string text) throw new ArgumentException($"Data must be type of '{typeof(string)}'.");
 
-            if (PlayerPrefs.HasKey(path))
-            {
-                PlayerPrefs.SetString(path, text);
-                return Task.FromResult(true);
-            }
+            PlayerPrefs.SetString(path, text);
 
-            return Task.FromResult(false);
+            return Task.FromResult(true);
         }
     }
 }
