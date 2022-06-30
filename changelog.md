@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-preview.4](https://github.com/unity-game-framework/ugf-data/releases/tag/2.0.0-preview.4) - 2022-06-30  
+
+### Release Notes
+
+- [Milestone](https://github.com/unity-game-framework/ugf-data/milestone/6?closed=1)  
+    
+
+### Fixed
+
+- Fix data loader prefs can't write ([#16](https://github.com/unity-game-framework/ugf-data/issues/16))  
+    - Add `DataLoaderInstanceController.GetOrCreate<T>()` extension method used to get or create and set the specified type of data.
+    - Fix `DataLoaderPrefs` class can't write data when no specified key was set.
+
 ## [2.0.0-preview.3](https://github.com/unity-game-framework/ugf-data/releases/tag/2.0.0-preview.3) - 2022-06-30  
 
 ### Release Notes
