@@ -22,7 +22,7 @@ namespace UGF.Data.Runtime
         protected override bool OnTryRead(string path, Type targetType, out object target)
         {
             IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
 
             if (loader.TryRead(path, DataLoaderProviderController.Context, out object data))
             {
@@ -37,7 +37,7 @@ namespace UGF.Data.Runtime
         protected override async Task<TaskResult<object>> OnTryReadAsync(string path, Type targetType)
         {
             IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
 
             TaskResult<object> result = await loader.TryReadAsync(path, DataLoaderProviderController.Context);
 
@@ -52,7 +52,7 @@ namespace UGF.Data.Runtime
         protected override bool OnTryWrite(string path, object target)
         {
             IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
 
             object data = serializer.Serialize(target, SerializeModule.Context);
 
@@ -62,7 +62,7 @@ namespace UGF.Data.Runtime
         protected override async Task<bool> OnTryWriteAsync(string path, object target)
         {
             IDataLoader loader = DataLoaderProviderController.Provider.Get(Description.DataLoaderId);
-            var serializer = SerializeModule.Provider.Get<ISerializerAsync<byte[]>>(Description.SerializerId);
+            var serializer = SerializeModule.Provider.Get<ISerializerAsync>(Description.SerializerId);
 
             object data = await serializer.SerializeAsync(target, SerializeModule.Context);
 
