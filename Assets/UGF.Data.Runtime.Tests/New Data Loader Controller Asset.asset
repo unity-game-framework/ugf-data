@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f363f07be57482d844e18c0b00d2905, type: 3}
   m_Name: New Data Loader Controller Asset
   m_EditorClassIdentifier: 
-  m_dataLoaderProviderController: bf0db6e669fb6834c963f22b343c4358
-  m_dataLoader: f7907960110cf184db62349ea17c739c
-  m_serializer: 
+  m_dataLoaderProviderController:
+    m_first: 7508743008696514278
+    m_second: 6359993293550543817
+  m_dataLoader:
+    m_first: 17403053607457159520
+    m_second: 11273491325824295643
+  m_serializer:
+    m_first: 0
+    m_second: 0
