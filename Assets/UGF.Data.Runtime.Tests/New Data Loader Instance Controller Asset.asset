@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd7c4ab9b6f46a8b25df901eede6543, type: 3}
   m_Name: New Data Loader Instance Controller Asset
   m_EditorClassIdentifier: 
-  m_dataLoaderController: 6111525df55629749925ab3afa60fcdc
+  m_dataLoaderController:
+    m_first: 2987282204197999197
+    m_second: 15923709010317616537
   m_path: 
   m_readOnInitialize: 0
   m_readOnInitializeAsync: 0

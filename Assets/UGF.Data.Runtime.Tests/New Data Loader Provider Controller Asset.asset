@@ -13,7 +13,15 @@ MonoBehaviour:
   m_Name: New Data Loader Provider Controller Asset
   m_EditorClassIdentifier: 
   m_loaders:
-  - m_guid: 7fc021db9c6f9f749a22799eaa04d51b
+  - m_guid:
+      m_first: 11489980552027578843
+      m_second: 2005514339913114266
     m_asset: {fileID: 11400000, guid: 7fc021db9c6f9f749a22799eaa04d51b, type: 2}
-  - m_guid: f7907960110cf184db62349ea17c739c
+  - m_guid:
+      m_first: 17403053607457159520
+      m_second: 11273491325824295643
+    m_asset: {fileID: 11400000, guid: f7907960110cf184db62349ea17c739c, type: 2}
+  - m_guid:
+      m_first: 17403053607457159520
+      m_second: 11273491325824295643
     m_asset: {fileID: 11400000, guid: f7907960110cf184db62349ea17c739c, type: 2}
