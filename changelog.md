@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-preview.1](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0-preview.1) - 2022-08-07  
+
+### Release Notes
+
+- [Milestone](https://github.com/unity-game-framework/ugf-data/milestone/8?closed=1)  
+    
+
+### Added
+
+- Add DataLoaderPrefs save immediately option ([#20](https://github.com/unity-game-framework/ugf-data/issues/20))  
+    - Update dependencies: `com.ugf.module.controllers` to `4.0.0-preview.3` and `com.ugf.runtimetools` to `2.14.0` versions.
+    - Add `DataLoaderPrefs.SaveOnWrite` property used to determine whether to save preferences after each write.
+
 ## [3.0.0-preview](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0-preview) - 2022-07-14  
 
 ### Release Notes
