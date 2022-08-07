@@ -8,6 +8,13 @@ namespace UGF.Data.Runtime
 {
     public class DataLoaderPrefs : DataLoader
     {
+        public bool SaveOnWrite { get; }
+
+        public DataLoaderPrefs(bool saveOnWrite = false)
+        {
+            SaveOnWrite = saveOnWrite;
+        }
+
         protected override bool OnTryRead(string path, IContext context, out object data)
         {
             if (PlayerPrefs.HasKey(path))
@@ -31,6 +38,11 @@ namespace UGF.Data.Runtime
 
             PlayerPrefs.SetString(path, text);
 
+            if (SaveOnWrite)
+            {
+                PlayerPrefs.Save();
+            }
+
             return true;
         }
 
@@ -39,6 +51,11 @@ namespace UGF.Data.Runtime
             if (data is not string text) throw new ArgumentException($"Data must be type of '{typeof(string)}'.");
 
             PlayerPrefs.SetString(path, text);
+
+            if (SaveOnWrite)
+            {
+                PlayerPrefs.Save();
+            }
 
             return Task.FromResult(true);
         }
