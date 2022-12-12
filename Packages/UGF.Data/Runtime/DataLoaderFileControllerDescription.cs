@@ -6,5 +6,6 @@ namespace UGF.Data.Runtime
     {
         public StoragePathType StoragePathType { get; set; }
         public string StoragePath { get; set; }
+        public string ExtensionName { get; set; }
     }
 }
