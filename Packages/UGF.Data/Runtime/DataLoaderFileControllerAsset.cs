@@ -9,9 +9,11 @@ namespace UGF.Data.Runtime
     {
         [SerializeField] private StoragePathType m_storagePathType;
         [SerializeField] private string m_storagePath;
+        [SerializeField] private string m_extensionName;
 
         public StoragePathType StoragePathType { get { return m_storagePathType; } set { m_storagePathType = value; } }
         public string StoragePath { get { return m_storagePath; } set { m_storagePath = value; } }
+        public string ExtensionName { get { return m_extensionName; } set { m_extensionName = value; } }
 
         protected override DataLoaderSerializeControllerDescription OnBuildDescription()
         {
@@ -21,7 +23,8 @@ namespace UGF.Data.Runtime
                 DataLoaderId = DataLoader,
                 SerializerId = Serializer,
                 StoragePathType = m_storagePathType,
-                StoragePath = m_storagePath
+                StoragePath = m_storagePath,
+                ExtensionName = m_extensionName
             };
 
             return description;
