@@ -7,6 +7,5 @@ namespace UGF.Data.Runtime
     {
         public GlobalId DataLoaderProviderControllerId { get; set; }
         public GlobalId DataLoaderId { get; set; }
-        public GlobalId SerializerId { get; set; }
     }
 }

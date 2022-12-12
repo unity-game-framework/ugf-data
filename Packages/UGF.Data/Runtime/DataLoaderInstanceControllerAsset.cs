@@ -9,7 +9,7 @@ namespace UGF.Data.Runtime
     [CreateAssetMenu(menuName = "Unity Game Framework/Data/Data Loader Instance Controller", order = 2000)]
     public class DataLoaderInstanceControllerAsset : ControllerDescribedAsset<DataLoaderInstanceController, DataLoaderInstanceControllerDescription>
     {
-        [AssetId(typeof(DataLoaderControllerAsset))]
+        [AssetId(typeof(ControllerAsset))]
         [SerializeField] private GlobalId m_dataLoaderController;
         [SerializeField] private string m_path;
         [SerializeField] private bool m_readOnInitialize;

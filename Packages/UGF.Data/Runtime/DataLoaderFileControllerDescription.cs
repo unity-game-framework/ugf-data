@@ -2,7 +2,7 @@
 
 namespace UGF.Data.Runtime
 {
-    public class DataLoaderFileControllerDescription : DataLoaderControllerDescription
+    public class DataLoaderFileControllerDescription : DataLoaderSerializeControllerDescription
     {
         public StoragePathType StoragePathType { get; set; }
         public string StoragePath { get; set; }

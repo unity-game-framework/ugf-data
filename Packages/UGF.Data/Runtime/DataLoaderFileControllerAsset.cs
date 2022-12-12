@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UGF.Data.Runtime
 {
     [CreateAssetMenu(menuName = "Unity Game Framework/Data/Data Loader File Controller", order = 2000)]
-    public class DataLoaderFileControllerAsset : DataLoaderControllerAsset
+    public class DataLoaderFileControllerAsset : DataLoaderSerializeControllerAsset
     {
         [SerializeField] private StoragePathType m_storagePathType;
         [SerializeField] private string m_storagePath;
@@ -13,7 +13,7 @@ namespace UGF.Data.Runtime
         public StoragePathType StoragePathType { get { return m_storagePathType; } set { m_storagePathType = value; } }
         public string StoragePath { get { return m_storagePath; } set { m_storagePath = value; } }
 
-        protected override DataLoaderControllerDescription OnBuildDescription()
+        protected override DataLoaderSerializeControllerDescription OnBuildDescription()
         {
             var description = new DataLoaderFileControllerDescription
             {
@@ -27,7 +27,7 @@ namespace UGF.Data.Runtime
             return description;
         }
 
-        protected override DataLoaderController OnBuild(DataLoaderControllerDescription description, IApplication application)
+        protected override DataLoaderSerializeController OnBuild(DataLoaderSerializeControllerDescription description, IApplication application)
         {
             return new DataLoaderFileController((DataLoaderFileControllerDescription)description, application);
         }
