@@ -7,7 +7,7 @@ using UGF.RuntimeTools.Runtime.Tasks;
 
 namespace UGF.Data.Runtime
 {
-    public class DataLoaderFileController : DataLoaderController
+    public class DataLoaderFileController : DataLoaderSerializeController
     {
         public new DataLoaderFileControllerDescription Description { get; }
 
