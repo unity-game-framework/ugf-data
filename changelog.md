@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0-preview.2](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0-preview.2) - 2022-12-12  
+
+### Release Notes
+
+- [Milestone](https://github.com/unity-game-framework/ugf-data/milestone/9?closed=1)  
+    
+
+### Added
+
+- Add data loader file controller extension option ([#23](https://github.com/unity-game-framework/ugf-data/issues/23))  
+    - Add `DataLoaderFileController.OnGetPath` method to be protected and overridable used to change path building behavior.
+    - Change `DataLoaderFileController` class to support extension name append for specified data path.
+- Add data loader memory controller ([#22](https://github.com/unity-game-framework/ugf-data/issues/22))  
+    - Update dependencies: `com.ugf.module.controllers` to `4.0.0-preview.6` version.
+    - Update package _Unity_ version to `2022.2`.
+    - Add `DataLoaderMemory` class as loader implementation with data storage in memory.
+    - Add `DataLoaderSerializeController` class as loader controller with serialization.
+    - Add `DataLoaderController<TDescription, TLoader>` abstract class to implement controller with specific type of the loader.
+    - Change `DataLoaderController` class to be the default loader controller implementation with direct loader usage.
+
 ## [3.0.0-preview.1](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0-preview.1) - 2022-08-07  
 
 ### Release Notes
