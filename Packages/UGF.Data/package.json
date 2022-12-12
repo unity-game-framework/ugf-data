@@ -2,7 +2,7 @@
   "name": "com.ugf.data",
   "displayName": "UGF.Data",
   "version": "3.0.0-preview.1",
-  "unity": "2022.1",
+  "unity": "2022.2",
   "apiCompatibility": ".NET Standard 2.1",
   "description": "Provides tools for working with data management.",
   "author": {
