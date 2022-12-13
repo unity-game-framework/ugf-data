@@ -20,28 +20,28 @@ namespace UGF.Data.Runtime
 
         protected override bool OnTryRead(string path, Type targetType, out object target)
         {
-            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderProviderControllerId);
+            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderId);
 
             return OnTryRead(loader, path, targetType, out target, DataLoaderProviderController.Context);
         }
 
         protected override Task<TaskResult<object>> OnTryReadAsync(string path, Type targetType)
         {
-            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderProviderControllerId);
+            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderId);
 
             return OnTryReadAsync(loader, path, targetType, DataLoaderProviderController.Context);
         }
 
         protected override bool OnTryWrite(string path, object target)
         {
-            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderProviderControllerId);
+            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderId);
 
             return OnTryWrite(loader, path, target, DataLoaderProviderController.Context);
         }
 
         protected override Task<bool> OnTryWriteAsync(string path, object target)
         {
-            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderProviderControllerId);
+            var loader = DataLoaderProviderController.Provider.Get<TLoader>(Description.DataLoaderId);
 
             return OnTryWriteAsync(loader, path, target, DataLoaderProviderController.Context);
         }
