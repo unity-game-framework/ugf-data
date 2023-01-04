@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0) - 2023-01-04  
+
+### Release Notes
+
+- [Milestone](https://github.com/unity-game-framework/ugf-data/milestone/11?closed=1)  
+    
+
+### Changed
+
+- Update project ([#28](https://github.com/unity-game-framework/ugf-data/issues/28))  
+    - Update dependencies: `com.ugf.module.controllers` to `4.0.0` and `com.ugf.module.serialize` to `5.0.0` versions.
+
 ## [3.0.0-preview.3](https://github.com/unity-game-framework/ugf-data/releases/tag/3.0.0-preview.3) - 2022-12-13  
 
 ### Release Notes

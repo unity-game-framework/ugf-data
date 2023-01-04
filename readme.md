@@ -4,14 +4,14 @@ UGF.Data
 
 ## Information
 
-- **Version**: `3.0.0-preview.3`
+- **Version**: `3.0.0`
 - **Unity**: `2022.2`
 - **API Compatibility Level**: `.NET Standard 2.1`
 
 ### Dependencies
 
-- `com.ugf.module.controllers`: `4.0.0-preview.6`
-- `com.ugf.module.serialize`: `5.0.0-preview`
+- `com.ugf.module.controllers`: `4.0.0`
+- `com.ugf.module.serialize`: `5.0.0`
 - `com.ugf.runtimetools`: `2.14.0`
 
 
